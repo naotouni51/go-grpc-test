@@ -18,9 +18,12 @@ type ServerServerSide struct {
 
 // Notification is
 func (s *ServerServerSide) Notification(req *pb.NotificationRequest, stream pb.Notification_NotificationServer) error {
-	fmt.Println("リクエスト受け取った")
+
+	num := req.GetNum()
+	log.Printf("リクエスト受信 %d秒通信します", num)
+
 	for i := int32(0); i < req.GetNum(); i++ {
-		message := fmt.Sprintf("%d", i)
+		message := fmt.Sprintf("サーバータイム: %s", time.Now())
 		if err := stream.Send(&pb.NotificationReply{
 			Message: message,
 		}); err != nil {
@@ -28,11 +31,12 @@ func (s *ServerServerSide) Notification(req *pb.NotificationRequest, stream pb.N
 		}
 		time.Sleep(time.Second * 1)
 	}
+
 	return nil
 }
 
 func main() {
-	fmt.Println("起動")
+	fmt.Println("サーバーを起動しました")
 
 	lis, err := net.Listen("tcp", ":8080")
 	if err != nil {

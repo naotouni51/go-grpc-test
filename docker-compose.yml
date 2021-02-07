@@ -12,9 +12,11 @@ services:
   server:
     command: air -c .air.toml
     build:
-      context: ./docker/golang
+      context: ./docker/server
       dockerfile: Dockerfile
     volumes:
-      - ./src:/go/src/go_grpc
+      - ./server:/go/src/go_grpc
     depends_on:
       - proto
+    ports:
+      - 8080:8080

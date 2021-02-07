@@ -1,0 +1,9 @@
+version: "3"
+services:
+  client:
+    command: go run main.go
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/go/src/go_grpc_client
