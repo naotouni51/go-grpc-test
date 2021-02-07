@@ -1,11 +1,20 @@
-version: "3.7"
+version: "3"
 services:
-  go-grpc:
+  proto:
+    # command: ./proto/scripts/protoc.sh
     build:
-      context: .
+      context: ./docker/proto
       dockerfile: Dockerfile
-    container_name: "go-grpc"
     volumes:
-      - .:/go-grpc
+      - .:/proto
     tty: true
-    privileged: true
+
+  server:
+    command: air -c .air.toml
+    build:
+      context: ./docker/golang
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/go/src/go_grpc
+    depends_on:
+      - proto
